@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Home - Team Task Manager{% endblock %}
+{% block page_heading %}Welcome to TaskFlow{% endblock %}
+{% block content %}
+<section class="hero text-white mb-5">
+    <span class="hero-badge"><i class="bi bi-kanban"></i> Organize projects, tasks, and teams in one place</span>
+    <h1 class="display-4 fw-bold mt-4 mb-3">Plan projects, assign tasks, and track team progress in one place.</h1>
+    <p class="lead col-lg-8 mx-auto mb-4">A professional full-stack web app with authentication, Admin/Member access, project teams, task assignment, status tracking, comments, and dashboards.</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg"><i class="bi bi-rocket-takeoff me-2"></i>Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+    </div>
+</section>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card feature-card"><div class="card-body p-4">
+            <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+            <h5 class="fw-bold">Role-Based Access</h5>
+            <p class="text-muted mb-0">Admins manage projects and tasks, while members focus on assigned work and updates.</p>
+        </div></div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card"><div class="card-body p-4">
+            <div class="feature-icon"><i class="bi bi-kanban"></i></div>
+            <h5 class="fw-bold">Interactive Task Tracking</h5>
+            <p class="text-muted mb-0">Track Pending, In Progress, Completed, priority, due dates, and overdue items clearly.</p>
+        </div></div>
+    </div>
+    <div class="col-md-4">
+        <div class="card feature-card"><div class="card-body p-4">
+            <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <h5 class="fw-bold">Smart Dashboards</h5>
+            <p class="text-muted mb-0">Visual dashboard cards help users understand total work, progress, and blockers quickly.</p>
+        </div></div>
+    </div>
+</div>
+
+<div class="glass-card p-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+
+            <p class="text-muted mb-0">Includes SQLite for local development, Flask authentication, clean templates, static CSS/JS, and production files like Procfile and requirements.txt.</p>
+        </div>
+        <div class="col-lg-5">
+            <div class="row g-3">
+                <div class="col-6"><div class="stat-card"><div class="stat-icon"><i class="bi bi-database"></i></div><h3>SQL</h3><p>SQLite DB</p></div></div>
+                <div class="col-6"><div class="stat-card success"><div class="stat-icon"><i class="bi bi-check-circle"></i></div><h3>RBAC</h3><p>Roles</p></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

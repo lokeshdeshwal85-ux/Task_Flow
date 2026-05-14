@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_heading %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="eyebrow">Overview</p>
+        <h2 class="fw-bold mb-1">Welcome back, {{ current_user.name }}</h2>
+        <p class="text-muted mb-0">Monitor projects, team members, overdue tasks, and recent activity.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('projects.create_project') }}" class="btn btn-primary"><i class="bi bi-folder-plus me-2"></i>Project</a>
+        <a href="{{ url_for('tasks.create_task') }}" class="btn btn-success"><i class="bi bi-plus-square me-2"></i>Task</a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-folder2-open"></i></div><h3>{{ projects|length }}</h3><p>Total Projects</p></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="stat-card success"><div class="stat-icon"><i class="bi bi-check2-square"></i></div><h3>{{ tasks|length }}</h3><p>Total Tasks</p></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="stat-card warning"><div class="stat-icon"><i class="bi bi-people"></i></div><h3>{{ users|length }}</h3><p>Team Users</p></div></div>
+    <div class="col-sm-6 col-xl-3"><div class="stat-card danger"><div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div><h3>{{ overdue|length }}</h3><p>Overdue Tasks</p></div></div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100 dashboard-chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="eyebrow mb-1">Task Status</p>
+                    <h5 class="fw-bold mb-0">Work Distribution</h5>
+                </div>
+                <i class="bi bi-pie-chart fs-3 text-primary"></i>
+            </div>
+            <canvas id="taskStatusChart" height="260"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100 dashboard-chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="eyebrow mb-1">Priority</p>
+                    <h5 class="fw-bold mb-0">Task Priority Overview</h5>
+                </div>
+                <i class="bi bi-bar-chart fs-3 text-primary"></i>
+            </div>
+            <canvas id="priorityChart" height="260"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100 dashboard-chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="eyebrow mb-1">Projects</p>
+                    <h5 class="fw-bold mb-0">Progress by Project</h5>
+                </div>
+                <i class="bi bi-graph-up-arrow fs-3 text-primary"></i>
+            </div>
+            <canvas id="projectProgressChart" height="260"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="glass-card p-4 insight-card">
+            <div class="d-flex align-items-center gap-3">
+                <div class="insight-icon danger">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <p class="eyebrow mb-1">Risk Insight</p>
+                    <h5 class="fw-bold mb-1">{{ overdue|length }} Overdue Tasks</h5>
+                    <p class="text-muted mb-0">Tasks past deadline and not completed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="glass-card p-4 insight-card">
+            <div class="d-flex align-items-center gap-3">
+                <div class="insight-icon success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <p class="eyebrow mb-1">Completion</p>
+                    <h5 class="fw-bold mb-1">{{ completed_tasks }} Completed</h5>
+                    <p class="text-muted mb-0">Completed work across all projects.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="glass-card p-4 insight-card">
+            <div class="d-flex align-items-center gap-3">
+                <div class="insight-icon info">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <p class="eyebrow mb-1">Team</p>
+                    <h5 class="fw-bold mb-1">{{ users|length }} Active Users</h5>
+                    <p class="text-muted mb-0">Registered admins and members.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="glass-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h4 class="fw-bold mb-1">Recent Tasks</h4>
+                    <p class="text-muted mb-0">Latest task activity across all projects.</p>
+                </div>
+                <input id="quickTableSearch" class="form-control w-auto" placeholder="Quick search...">
+            </div>
+            {% include "tasks/_task_table.html" %}
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="glass-card p-4 h-100">
+            <h4 class="fw-bold mb-3">Project Progress</h4>
+            {% for project in projects[:5] %}
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-semibold">{{ project.title }}</span>
+                        <span class="text-muted">{{ project.progress() }}%</span>
+                    </div>
+                    <div class="progress"><div class="progress-bar" style="width: {{ project.progress() }}%"></div></div>
+                </div>
+            {% else %}
+                <div class="empty-state"><i class="bi bi-folder-x"></i>No projects yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    const chartData = {{ chart_data | tojson }};
+
+    const chartTextColor = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#697386';
+    const chartGridColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || 'rgba(15,23,42,.09)';
+
+    const statusCanvas = document.getElementById("taskStatusChart");
+    if (statusCanvas) {
+        new Chart(statusCanvas, {
+            type: "doughnut",
+            data: {
+                labels: chartData.status_labels,
+                datasets: [{
+                    data: chartData.status_values,
+                    backgroundColor: ["#64748b", "#f59e0b", "#10b981"],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "bottom",
+                        labels: { color: chartTextColor, usePointStyle: true }
+                    }
+                },
+                cutout: "68%"
+            }
+        });
+    }
+
+    const priorityCanvas = document.getElementById("priorityChart");
+    if (priorityCanvas) {
+        new Chart(priorityCanvas, {
+            type: "bar",
+            data: {
+                labels: chartData.priority_labels,
+                datasets: [{
+                    label: "Tasks",
+                    data: chartData.priority_values,
+                    backgroundColor: ["#38bdf8", "#6366f1", "#f59e0b", "#ef4444"],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: chartTextColor }, grid: { display: false } },
+                    y: { beginAtZero: true, ticks: { precision: 0, color: chartTextColor }, grid: { color: chartGridColor } }
+                }
+            }
+        });
+    }
+
+    const projectCanvas = document.getElementById("projectProgressChart");
+    if (projectCanvas) {
+        new Chart(projectCanvas, {
+            type: "bar",
+            data: {
+                labels: chartData.project_labels,
+                datasets: [{
+                    label: "Progress %",
+                    data: chartData.project_values,
+                    backgroundColor: "#5b5cf6",
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, max: 100, ticks: { color: chartTextColor }, grid: { color: chartGridColor } },
+                    y: { ticks: { color: chartTextColor }, grid: { display: false } }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}

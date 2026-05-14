@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Member Dashboard{% endblock %}
+{% block page_heading %}Member Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="eyebrow">My Workspace</p>
+        <h2 class="fw-bold mb-1">Hello, {{ current_user.name }}</h2>
+        <p class="text-muted mb-0">View your assigned work, deadlines, and project progress.</p>
+    </div>
+    <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-primary"><i class="bi bi-list-task me-2"></i>View My Tasks</a>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4"><div class="stat-card"><div class="stat-icon"><i class="bi bi-folder2-open"></i></div><h3>{{ projects|length }}</h3><p>My Projects</p></div></div>
+    <div class="col-md-4"><div class="stat-card success"><div class="stat-icon"><i class="bi bi-check2-square"></i></div><h3>{{ tasks|length }}</h3><p>My Tasks</p></div></div>
+    <div class="col-md-4"><div class="stat-card danger"><div class="stat-icon"><i class="bi bi-clock-history"></i></div><h3>{{ overdue|length }}</h3><p>Overdue</p></div></div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="glass-card p-4 h-100 dashboard-chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="eyebrow mb-1">My Task Status</p>
+                    <h5 class="fw-bold mb-0">Assigned Work Overview</h5>
+                </div>
+                <i class="bi bi-pie-chart fs-3 text-primary"></i>
+            </div>
+            <canvas id="memberStatusChart" height="230"></canvas>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="glass-card p-4 h-100 dashboard-chart-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="eyebrow mb-1">Priority</p>
+                    <h5 class="fw-bold mb-0">My Task Priority</h5>
+                </div>
+                <i class="bi bi-bar-chart fs-3 text-primary"></i>
+            </div>
+            <canvas id="memberPriorityChart" height="230"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="glass-card p-4 insight-card">
+            <p class="eyebrow mb-1">Risk Insight</p>
+            <h5 class="fw-bold mb-1">{{ overdue|length }} Overdue</h5>
+            <p class="text-muted mb-0">Assigned tasks past deadline.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 insight-card">
+            <p class="eyebrow mb-1">Completion</p>
+            <h5 class="fw-bold mb-1">{{ completed_tasks }} Completed</h5>
+            <p class="text-muted mb-0">Your completed assigned tasks.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card p-4 insight-card">
+            <p class="eyebrow mb-1">Projects</p>
+            <h5 class="fw-bold mb-1">{{ projects|length }} Active</h5>
+            <p class="text-muted mb-0">Projects you are part of.</p>
+        </div>
+    </div>
+</div>
+
+<div class="glass-card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold mb-1">My Assigned Tasks</h4>
+            <p class="text-muted mb-0">Update status and add comments from the task details page.</p>
+        </div>
+        <input id="quickTableSearch" class="form-control w-auto" placeholder="Quick search...">
+    </div>
+    {% include "tasks/_task_table.html" %}
+</div>
+
+<script>
+    const memberChartData = {{ chart_data | tojson }};
+    const chartTextColor = getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#697386';
+    const chartGridColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || 'rgba(15,23,42,.09)';
+
+    const memberStatusCanvas = document.getElementById("memberStatusChart");
+    if (memberStatusCanvas) {
+        new Chart(memberStatusCanvas, {
+            type: "doughnut",
+            data: {
+                labels: memberChartData.status_labels,
+                datasets: [{
+                    data: memberChartData.status_values,
+                    backgroundColor: ["#64748b", "#f59e0b", "#10b981"],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: "bottom", labels: { color: chartTextColor, usePointStyle: true } } },
+                cutout: "68%"
+            }
+        });
+    }
+
+    const memberPriorityCanvas = document.getElementById("memberPriorityChart");
+    if (memberPriorityCanvas) {
+        new Chart(memberPriorityCanvas, {
+            type: "bar",
+            data: {
+                labels: memberChartData.priority_labels,
+                datasets: [{
+                    label: "Tasks",
+                    data: memberChartData.priority_values,
+                    backgroundColor: ["#38bdf8", "#6366f1", "#f59e0b", "#ef4444"],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: chartTextColor }, grid: { display: false } },
+                    y: { beginAtZero: true, ticks: { precision: 0, color: chartTextColor }, grid: { color: chartGridColor } }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
