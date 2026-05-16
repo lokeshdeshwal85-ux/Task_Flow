@@ -1,53 +1,226 @@
 {% extends "base.html" %}
-{% block title %}Home - Team Task Manager{% endblock %}
-{% block page_heading %}Welcome to TaskFlow{% endblock %}
+{% block title %}Home - Team WorkHive{% endblock %}
+{% block page_heading %}Welcome to WorkHive{% endblock %}
 {% block content %}
-<section class="hero text-white mb-5">
-    <span class="hero-badge"><i class="bi bi-kanban"></i> Organize projects, tasks, and teams in one place</span>
-    <h1 class="display-4 fw-bold mt-4 mb-3">Plan projects, assign tasks, and track team progress in one place.</h1>
-    <p class="lead col-lg-8 mx-auto mb-4">A professional full-stack web app with authentication, Admin/Member access, project teams, task assignment, status tracking, comments, and dashboards.</p>
-    <div class="d-flex flex-wrap justify-content-center gap-3">
-        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg"><i class="bi bi-rocket-takeoff me-2"></i>Get Started</a>
-        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
+
+<!-- Professional Dynamic Carousel Hero Section -->
+<div class="hero-carousel mb-5">
+    <div class="carousel slide" id="heroCarousel" data-bs-ride="carousel" data-bs-interval="7000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <div class="carousel-inner">
+            <!-- Slide 1: Task Management Excellence -->
+            <div class="carousel-item active" data-bs-interval="7000">
+                <div class="hero-slide">
+                    <div class="hero-content">
+                        <span class="hero-badge animate-pulse">
+                            <i class="bi bi-lightning-fill"></i> Powerful Task Management
+                        </span>
+                        <h1 class="display-3 fw-bold mt-4 mb-3 animate-slideIn">
+                            Organize Work That Matters
+                        </h1>
+                        <p class="lead col-lg-9 mb-4 animate-fadeIn">
+                            Manage projects, assign tasks, track progress, and collaborate with your team in real-time. From planning to completion, TaskFlow keeps everyone aligned and productive.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 animate-slideUp">
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-bold">
+                                <i class="bi bi-rocket-takeoff me-2"></i>Start Free Trial
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg fw-bold">
+                                <i class="bi bi-arrow-right me-2"></i>Sign In
+                            </a>
+                        </div>
+                        <div class="mt-5 pt-3">
+                            <p class="text-white-50 small">✓ 14-day free trial • ✓ No credit card required • ✓ Cancel anytime</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-image">
+                        <div class="image-container" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1000&h=600&fit=crop');">
+                            <div class="image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Team Collaboration -->
+            <div class="carousel-item" data-bs-interval="7000">
+                <div class="hero-slide">
+                    <div class="hero-content">
+                        <span class="hero-badge animate-pulse">
+                            <i class="bi bi-people-fill"></i> Seamless Collaboration
+                        </span>
+                        <h1 class="display-3 fw-bold mt-4 mb-3 animate-slideIn">
+                            Connect Your Entire Team
+                        </h1>
+                        <p class="lead col-lg-9 mb-4 animate-fadeIn">
+                            Break down silos with instant communication, shared workspaces, and real-time notifications. Keep every team member informed and engaged throughout the project lifecycle.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 animate-slideUp">
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-bold">
+                                <i class="bi bi-rocket-takeoff me-2"></i>Start Free Trial
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg fw-bold">
+                                <i class="bi bi-arrow-right me-2"></i>Sign In
+                            </a>
+                        </div>
+                        <div class="mt-5 pt-3">
+                            <p class="text-white-50 small">✓ 14-day free trial • ✓ No credit card required • ✓ Cancel anytime</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-image">
+                        <div class="image-container" style="background-image: url('https://images.unsplash.com/photo-1573497019236-17f8177b81e8?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                            <div class="image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Data-Driven Insights -->
+            <div class="carousel-item" data-bs-interval="7000">
+                <div class="hero-slide">
+                    <div class="hero-content">
+                        <span class="hero-badge animate-pulse">
+                            <i class="bi bi-graph-up-arrow"></i> Advanced Analytics
+                        </span>
+                        <h1 class="display-3 fw-bold mt-4 mb-3 animate-slideIn">
+                            Visualize Project Health
+                        </h1>
+                        <p class="lead col-lg-9 mb-4 animate-fadeIn">
+                            Make data-driven decisions with comprehensive dashboards showing project progress, team velocity, and performance metrics. Identify bottlenecks before they become problems.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3 animate-slideUp">
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-bold">
+                                <i class="bi bi-rocket-takeoff me-2"></i>Start Free Trial
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg fw-bold">
+                                <i class="bi bi-arrow-right me-2"></i>Sign In
+                            </a>
+                        </div>
+                        <div class="mt-5 pt-3">
+                            <p class="text-white-50 small">✓ 14-day free trial • ✓ No credit card required • ✓ Cancel anytime</p>
+                        </div>
+                    </div>
+
+                    <div class="hero-image">
+                        <div class="image-container" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1000&h=600&fit=crop');">
+                            <div class="image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-</section>
+</div>
+
+<!-- Trust Section -->
+<div class="trust-section mb-5 py-4">
+    <div class="row align-items-center g-4">
+        <div class="col-md-6">
+            <h6 class="text-muted text-uppercase fw-bold mb-3">Trusted by Teams Worldwide</h6>
+            <div class="d-flex gap-4 flex-wrap">
+                <div class="trust-stat">
+                    <div class="trust-number">50K+</div>
+                    <div class="trust-label">Active Users</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-number">10K+</div>
+                    <div class="trust-label">Projects Managed</div>
+                </div>
+                <div class="trust-stat">
+                    <div class="trust-number">99.9%</div>
+                    <div class="trust-label">Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="d-flex gap-3 align-items-center">
+                <span class="badge bg-success-subtle text-success px-3 py-2">
+                    <i class="bi bi-star-fill me-1"></i>4.9/5 Stars
+                </span>
+                <span class="text-muted small">Based on 2,500+ reviews</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row g-4 mb-5">
     <div class="col-md-4">
-        <div class="card feature-card"><div class="card-body p-4">
-            <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
-            <h5 class="fw-bold">Role-Based Access</h5>
-            <p class="text-muted mb-0">Admins manage projects and tasks, while members focus on assigned work and updates.</p>
-        </div></div>
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon"><i class="bi bi-shield-lock"></i></div>
+                <h5 class="fw-bold">Role-Based Access</h5>
+                <p class="text-muted mb-0">Admins manage projects and tasks, while members focus on assigned work and updates.</p>
+            </div>
+        </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card feature-card"><div class="card-body p-4">
-            <div class="feature-icon"><i class="bi bi-kanban"></i></div>
-            <h5 class="fw-bold">Interactive Task Tracking</h5>
-            <p class="text-muted mb-0">Track Pending, In Progress, Completed, priority, due dates, and overdue items clearly.</p>
-        </div></div>
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon"><i class="bi bi-kanban"></i></div>
+                <h5 class="fw-bold">Interactive Task Tracking</h5>
+                <p class="text-muted mb-0">Track Pending, In Progress, Completed, priority, due dates, and overdue items clearly.</p>
+            </div>
+        </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card feature-card"><div class="card-body p-4">
-            <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
-            <h5 class="fw-bold">Smart Dashboards</h5>
-            <p class="text-muted mb-0">Visual dashboard cards help users understand total work, progress, and blockers quickly.</p>
-        </div></div>
+        <div class="card feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <h5 class="fw-bold">Smart Dashboards</h5>
+                <p class="text-muted mb-0">Visual dashboard cards help users understand total work, progress, and blockers quickly.</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="glass-card p-4">
     <div class="row align-items-center g-4">
         <div class="col-lg-7">
-
-            <p class="text-muted mb-0">Includes SQLite for local development, Flask authentication, clean templates, static CSS/JS, and production files like Procfile and requirements.txt.</p>
+            <p class="text-muted mb-0">
+                Includes SQLite for local development, Flask authentication, clean templates, static CSS/JS, and production files like Procfile and requirements.txt.
+            </p>
         </div>
+
         <div class="col-lg-5">
             <div class="row g-3">
-                <div class="col-6"><div class="stat-card"><div class="stat-icon"><i class="bi bi-database"></i></div><h3>SQL</h3><p>SQLite DB</p></div></div>
-                <div class="col-6"><div class="stat-card success"><div class="stat-icon"><i class="bi bi-check-circle"></i></div><h3>RBAC</h3><p>Roles</p></div></div>
+                <div class="col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="bi bi-database"></i></div>
+                        <h3>SQL</h3>
+                        <p>SQLite DB</p>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="stat-card success">
+                        <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+                        <h3>RBAC</h3>
+                        <p>Roles</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

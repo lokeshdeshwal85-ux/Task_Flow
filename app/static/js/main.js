@@ -6,15 +6,10 @@ root.setAttribute("data-theme", savedTheme);
 const themeToggle = document.getElementById("themeToggle");
 
 if (themeToggle) {
-    const label = themeToggle.querySelector("span");
     const icon = themeToggle.querySelector("i");
 
     const syncThemeButton = () => {
         const isDark = root.getAttribute("data-theme") === "dark";
-
-        if (label) {
-            label.textContent = isDark ? "Light Mode" : "Dark Mode";
-        }
 
         if (icon) {
             icon.className = isDark ? "bi bi-sun" : "bi bi-moon-stars";
@@ -31,25 +26,45 @@ if (themeToggle) {
     });
 }
 
-// Sidebar Collapse Button
+// Hero Carousel Enhancement
 document.addEventListener("DOMContentLoaded", function () {
-    const sidebarToggle = document.getElementById("sidebarToggle");
-    const sidebarToggleIcon = document.getElementById("sidebarToggleIcon");
+    const heroCarousel = document.getElementById("heroCarousel");
+    
+    if (heroCarousel) {
+        // Initialize Bootstrap carousel with custom timing
+        const carousel = new bootstrap.Carousel(heroCarousel, {
+            interval: 6000,
+            ride: "carousel",
+            wrap: true
+        });
 
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener("click", function () {
-            document.body.classList.toggle("sidebar-collapsed");
+        // Trigger animation classes on slide change
+        heroCarousel.addEventListener("slide.bs.carousel", function (event) {
+            const nextSlide = event.relatedTarget;
+            const animatedElements = nextSlide.querySelectorAll("[class*='animate-']");
+            
+            animatedElements.forEach((el) => {
+                // Reset animation
+                el.style.animation = "none";
+                setTimeout(() => {
+                    el.style.animation = "";
+                }, 10);
+            });
+        });
 
-            if (sidebarToggleIcon) {
-                if (document.body.classList.contains("sidebar-collapsed")) {
-                    sidebarToggleIcon.className = "bi bi-chevron-right";
-                } else {
-                    sidebarToggleIcon.className = "bi bi-chevron-left";
-                }
-            }
+        // Pause on hover
+        heroCarousel.addEventListener("mouseenter", function () {
+            carousel.pause();
+        });
+
+        // Resume on mouse leave
+        heroCarousel.addEventListener("mouseleave", function () {
+            carousel.cycle();
         });
     }
 });
+
+// Sidebar toggle removed - using top navbar instead
 
 // Auto close flash alerts
 setTimeout(() => {
